@@ -788,6 +788,7 @@ async function getPageData(tab) {
 
       const getMeta = (name) =>
         document.querySelector(`meta[name="${name}"], meta[property="${name}"]`)?.content?.trim() || "";
+      const isWeChatArticle = /(^|\.)mp\.weixin\.qq\.com$/i.test(location.hostname);
       const normalizeText = (value, limit = 22000) =>
         (value || "")
           .replace(/\u00a0/g, " ")
@@ -827,6 +828,10 @@ async function getPageData(tab) {
         }
 
         const tagName = element.tagName.toLowerCase();
+        if (tagName === "body" || tagName === "html") {
+          return false;
+        }
+
         if (["nav", "header", "footer", "aside", "form", "button", "noscript", "script", "style", "svg", "canvas", "iframe"].includes(tagName)) {
           return true;
         }
@@ -905,6 +910,12 @@ async function getPageData(tab) {
         const normalized = (text || "").replace(/\s+/g, " ").trim();
         if (!normalized) {
           return false;
+        }
+
+        if (
+          /^(微信扫一扫关注该公众号|微信扫一扫可打开此内容，使用完整服务|继续滑动看下一个|预览时标签不可点|轻触阅读原文)$/i.test(normalized)
+        ) {
+          return true;
         }
 
         return /^(为你推荐|相关推荐|热门文章|评论|评论区|更多内容|延伸阅读|相关阅读|相关文章)$/i.test(normalized);
@@ -1019,14 +1030,47 @@ async function getPageData(tab) {
 
         return bestNode;
       };
+      const resolvePageTitle = (titleElement) => {
+        const titleCandidates = [
+          normalizeText(titleElement?.innerText || "", 220),
+          normalizeText(getMeta("og:title"), 220),
+          normalizeText(getMeta("twitter:title"), 220),
+          normalizeText(document.querySelector("meta[property='article:title']")?.content || "", 220),
+          normalizeText(document.title.replace(/\s*[|｜-]\s*[^|｜-]+$/, "").trim() || document.title, 220),
+          normalizeText(document.title, 220)
+        ]
+          .map((item) => item.replace(/\s+/g, " ").trim())
+          .filter(Boolean);
+
+        if (isWeChatArticle) {
+          const prioritized = titleCandidates.find((item) => item !== "微信公众平台");
+          if (prioritized) {
+            return prioritized;
+          }
+        }
+
+        return titleCandidates[0] || "";
+      };
       const getCandidateRoot = (titleElement) => {
+        if (isWeChatArticle) {
+          const preferredRoot = document.querySelector("#js_content, #img-content, .rich_media_content");
+          if (preferredRoot instanceof HTMLElement && (preferredRoot.innerText || "").trim().length > 180) {
+            return preferredRoot;
+          }
+        }
+
         const selectors = [
+          "#js_content",
+          "#img-content",
           "article",
           "main article",
           "main",
           "[role='main'] article",
           "[role='main']",
           "[itemprop='articleBody']",
+          ".rich_media_content",
+          ".rich_media_area_primary_inner",
+          ".rich_media_wrp",
           "[class*='article-body' i]",
           "[class*='article-main' i]",
           ".article",
@@ -1097,6 +1141,10 @@ async function getPageData(tab) {
             }
           }
 
+          if (node.tagName === "BODY") {
+            score -= 2600;
+          }
+
           if (String(source || "").startsWith("selector:")) {
             score += 260;
           }
@@ -1108,6 +1156,11 @@ async function getPageData(tab) {
 
           if (countNoiseDescendants(node) > paragraphCount * 4 + 18) {
             score -= 600;
+          }
+
+          const classHint = `${node.id || ""} ${node.className || ""}`.toLowerCase();
+          if (/(js_content|rich_media_content|rich_media_area_primary_inner|img-content)/.test(classHint)) {
+            score += 900;
           }
 
           if (!isElementVisible(node)) {
@@ -1299,6 +1352,10 @@ async function getPageData(tab) {
             score -= 45;
           }
 
+          if (/res\.wx\.qq\.com\/op_res/i.test(url)) {
+            score -= 90;
+          }
+
           if (!/[?&](?:w|width|h|height)=\d+/i.test(url)) {
             score += 8;
           }
@@ -1371,7 +1428,7 @@ async function getPageData(tab) {
         let reachedArticleTail = false;
 
         for (const element of elements) {
-          if (hasNoiseAncestor(element, rootNode.parentElement)) {
+          if (hasNoiseAncestor(element, rootNode)) {
             continue;
           }
 
@@ -1425,7 +1482,7 @@ async function getPageData(tab) {
             continue;
           }
 
-          if (blocks.length >= 6 && isArticleTailText(text)) {
+          if (blocks.length >= 6 && (isArticleTailText(text) || isStopSectionText(text))) {
             reachedArticleTail = true;
             continue;
           }
@@ -1573,9 +1630,10 @@ async function getPageData(tab) {
         "";
       const description = getMeta("description") || getMeta("og:description") || getMeta("twitter:description");
       const titleElement = findTitleElement();
+      const resolvedTitle = resolvePageTitle(titleElement);
       const root = getCandidateRoot(titleElement);
       const articleText = extractCleanArticleText(root);
-      const titleText = document.title.replace(/\s*[|｜-]\s*[^|｜-]+$/, "").trim() || document.title;
+      const titleText = resolvedTitle || document.title.replace(/\s*[|｜-]\s*[^|｜-]+$/, "").trim() || document.title;
       const rootContentBlocks = extractContentBlocks(root, titleElement);
       const fallbackContentBlocks = extractFallbackArticleBlocks(titleElement, titleText);
       const rootImageCount = rootContentBlocks.filter((block) => block.type === "image").length;
@@ -1590,7 +1648,7 @@ async function getPageData(tab) {
       const excerpt = normalizeText(excerptSource, 1600);
 
       return {
-        title: document.title,
+        title: resolvedTitle || document.title,
         canonicalUrl,
         siteName,
         author,
@@ -1601,7 +1659,7 @@ async function getPageData(tab) {
         contentBlocks,
         selectedText: selection.slice(0, 1200),
         debugInfo: {
-          extractorVersion: "2026-06-02-image-pass-2",
+          extractorVersion: "2026-06-03-wechat-root-pass",
           rootTag: root?.tagName || "",
           rootClass: String(root?.className || "").slice(0, 300),
           rootTextLength: (root?.innerText || "").trim().length,
