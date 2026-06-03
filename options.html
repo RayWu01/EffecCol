@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>EffecCol - 设置</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body class="options-body">
+    <div class="shell">
+      <div class="card">
+        <section class="hero">
+          <div class="hero-top">
+            <div class="brand-lockup">
+              <div class="brand-mark">
+                <img src="icons/effective-collection-48.png" alt="EffecCol">
+              </div>
+              <div class="brand-copy">
+                <span class="eyebrow">EffecCol</span>
+                <h1>把保存体验调到最顺手</h1>
+              </div>
+            </div>
+            <div class="hero-orbit">
+              <span class="orbit-pill">Silent Save</span>
+              <span class="orbit-dot"></span>
+              <span class="orbit-pill">Clipboard Card</span>
+            </div>
+          </div>
+          <p>主入口仍然是浏览器工具栏里的扩展图标。这里主要负责三件事：接入 AI、定义复制到剪贴板的卡片内容，以及确认 Obsidian 插件在线。</p>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <span class="step-badge">AI</span>
+            <div>
+              <p class="section-title">AI 服务</p>
+              <p class="section-subtitle">先选摘要所用的 API 厂商。切换厂商时，会记住你之前填过的 Key。</p>
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="inline-grid">
+              <div class="field">
+                <label for="aiProvider">API 厂商</label>
+                <select id="aiProvider" name="aiProvider"></select>
+                <div class="hint">普通情况直接选厂商；只有兼容接口才需要手动填 endpoint。</div>
+              </div>
+
+              <div class="field">
+                <label for="aiModel">模型</label>
+                <input id="aiModel" name="aiModel" type="text" placeholder="请输入模型名">
+                <div class="hint" id="aiModelHint">会自动填入当前厂商的推荐默认模型。</div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="aiApiKey">API Key</label>
+              <input id="aiApiKey" name="aiApiKey" type="password" placeholder="sk-...">
+              <div class="hint" id="aiApiKeyHint">保存在当前浏览器本地，不同步到别的设备。</div>
+            </div>
+
+            <div class="actions compact-actions">
+              <button id="testAiButton" class="secondary" type="button">测试 AI 连接</button>
+              <button id="checkBridgeButton" class="secondary" type="button">检查 Obsidian 插件连接</button>
+            </div>
+
+            <div id="aiStatus" class="status-box info"></div>
+            <div id="bridgeStatus" class="status-box info"></div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <span class="step-badge">卡片</span>
+            <div>
+              <p class="section-title">剪贴板卡片</p>
+              <p class="section-subtitle">这里定义复制到剪贴板的内容，不影响 Obsidian 里的归档笔记结构。</p>
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="field">
+              <label for="clipboardPreset">卡片预设</label>
+              <select id="clipboardPreset" name="clipboardPreset"></select>
+              <div class="hint" id="clipboardPresetHint">先选一个预设，再按需微调下面这些字段。</div>
+            </div>
+
+            <div class="toggle-grid">
+              <label class="toggle-card">
+                <input id="clipboardTitleBold" type="checkbox">
+                <span>标题加粗</span>
+              </label>
+              <label class="toggle-card">
+                <input id="clipboardIncludeNotePath" type="checkbox">
+                <span>包含 Obsidian 笔记路径</span>
+              </label>
+              <label class="toggle-card">
+                <input id="clipboardIncludeObsidianDeepLink" type="checkbox">
+                <span>包含 Obsidian 深链</span>
+              </label>
+              <label class="toggle-card">
+                <input id="clipboardIncludeSourceUrl" type="checkbox">
+                <span>包含原文链接</span>
+              </label>
+              <label class="toggle-card">
+                <input id="clipboardIncludeSiteName" type="checkbox">
+                <span>包含站点名</span>
+              </label>
+              <label class="toggle-card">
+                <input id="clipboardIncludeCapturedAt" type="checkbox">
+                <span>包含抓取时间</span>
+              </label>
+            </div>
+
+            <div class="preview-card">
+              <h2>卡片预览</h2>
+              <pre id="clipboardPreview">保存后，这里会显示当前配置下的大致输出样式。</pre>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <span class="step-badge">摘要</span>
+            <div>
+              <p class="section-title">AI 摘要风格</p>
+              <p class="section-subtitle">先决定摘要长度和偏好；只有你真的想更有风格时，再去开高级风格。</p>
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="inline-grid">
+              <div class="field">
+                <label for="aiSummaryLength">摘要长度</label>
+                <select id="aiSummaryLength" name="aiSummaryLength"></select>
+                <div class="hint">控制摘要的密度和总长度。</div>
+              </div>
+
+              <div class="field">
+                <label for="aiSummaryPreference">摘要偏好</label>
+                <select id="aiSummaryPreference" name="aiSummaryPreference"></select>
+                <div class="hint">决定摘要更像知识卡、要点提炼还是行动启发。</div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="aiSummaryStyle">高级风格</label>
+              <select id="aiSummaryStyle" name="aiSummaryStyle"></select>
+              <div class="hint">默认关闭。开启后会让措辞更偏某种思考方式，但仍然忠于原文。</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <details class="advanced-section">
+            <summary>我想看高级设置</summary>
+            <div class="advanced-grid">
+              <div class="field">
+                <label for="aiEndpoint">API Endpoint</label>
+                <input id="aiEndpoint" name="aiEndpoint" type="url" placeholder="https://...">
+                <div class="hint" id="aiEndpointHint">只有自定义兼容接口时必须填写，其他厂商一般不用改。</div>
+              </div>
+
+              <div class="field">
+                <label for="aiSummaryInstruction">额外摘要要求</label>
+                <textarea id="aiSummaryInstruction" name="aiSummaryInstruction" placeholder="可选。例如：少一点套话，更偏实践启发。"></textarea>
+                <div class="hint">用于补充长期偏好，不建议写太长。</div>
+              </div>
+
+              <div class="preview-card">
+                <h2>一次点击后的结果</h2>
+                <pre>1. 点击 EffecCol 图标
+2. 页面提示：正在保存至 Obsidian...
+3. 扩展调用你当前选择的 AI 服务生成摘要
+4. Obsidian 插件直接写入当前 Vault
+5. 页面提示：保存成功，AI 总结已复制到剪贴板</pre>
+              </div>
+            </div>
+          </details>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <span class="step-badge">状态</span>
+            <div>
+              <p class="section-title">系统状态</p>
+              <p class="section-subtitle">确认 Obsidian 插件在线，并在必要时恢复默认设置。</p>
+            </div>
+          </div>
+          <div class="stack">
+            <div id="settingsStatus" class="status-box info"></div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="actions options-actions">
+            <button id="saveButton" class="primary" type="button">保存设置</button>
+            <button id="resetButton" class="secondary" type="button">恢复默认</button>
+            <button id="closeButton" class="ghost" type="button">关闭页面</button>
+          </div>
+          <p class="footer-note">如果点击图标后提示“没有连上 Obsidian 插件”，先打开 Obsidian 并启用 EffecCol 插件，再回网页重试。</p>
+        </section>
+      </div>
+    </div>
+
+    <script src="shared.js"></script>
+    <script src="options.js"></script>
+  </body>
+</html>

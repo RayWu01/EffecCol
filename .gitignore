@@ -1,0 +1,17 @@
+.DS_Store
+Thumbs.db
+
+# Local editor / OS
+.idea/
+.vscode/
+
+# Temporary files
+*.log
+*.tmp
+*.swp
+
+# Local runtime artifacts
+effecol-obsidian-plugin/status.json
+
+# Archives / packages
+*.zip

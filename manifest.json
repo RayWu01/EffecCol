@@ -1,0 +1,40 @@
+{
+  "manifest_version": 3,
+  "name": "EffecCol",
+  "version": "0.2.0",
+  "description": "一键把当前网页沉淀到 Obsidian 的 EffecCol，并复制可继续整理的剪贴板卡片。",
+  "icons": {
+    "16": "icons/effective-collection-16.png",
+    "32": "icons/effective-collection-32.png",
+    "48": "icons/effective-collection-48.png",
+    "128": "icons/effective-collection-128.png"
+  },
+  "permissions": [
+    "activeTab",
+    "clipboardWrite",
+    "offscreen",
+    "permissions",
+    "scripting",
+    "storage",
+    "tabs"
+  ],
+  "host_permissions": [
+    "http://127.0.0.1/*"
+  ],
+  "optional_host_permissions": [
+    "https://*/*",
+    "http://*/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "EffecCol",
+    "default_icon": {
+      "16": "icons/effective-collection-16.png",
+      "32": "icons/effective-collection-32.png",
+      "48": "icons/effective-collection-48.png"
+    }
+  },
+  "options_page": "options.html"
+}

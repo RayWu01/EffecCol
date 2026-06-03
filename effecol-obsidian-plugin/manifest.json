@@ -1,0 +1,10 @@
+{
+  "id": "effecol",
+  "name": "EffecCol",
+  "version": "0.1.0",
+  "minAppVersion": "1.5.0",
+  "description": "Provide a local save endpoint so the EffecCol browser extension can silently write notes into the current vault.",
+  "author": "EffecCol contributors",
+  "authorUrl": "",
+  "isDesktopOnly": true
+}
