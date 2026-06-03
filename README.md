@@ -8,7 +8,7 @@ EffecCol is a Chrome extension plus an Obsidian plugin for people who save a lot
 
 ## Status
 
-EffecCol is currently an **open-source v1 prototype**. The core flow works, but installation is still manual and public release packaging is not finished yet.
+EffecCol is currently an **open-source v1 prototype**. The core flow works, installation is still manual, and GitHub release packages are now available, but browser store and Obsidian community distribution are not finished yet.
 
 ## Why This Project Exists
 
@@ -201,6 +201,7 @@ What that means:
 - manual installation is still required
 - Obsidian must stay open
 - article extraction and image handling are still being improved
+- GitHub release packages are available for manual installation
 - the browser extension is not yet published to a store
 - the Obsidian plugin is not yet packaged for official community distribution
 
@@ -209,7 +210,7 @@ What that means:
 - Better article extraction across more sites
 - Better low-value page detection
 - Smoother first-run onboarding
-- Packaging for public release
+- Browser store and community distribution packaging
 - More reliable image downloading and rendering
 
 ## Contributing
