@@ -4,136 +4,148 @@
 
 > Turn passive bookmarks into active knowledge capture.
 
-EffecCol is a Chrome extension plus an Obsidian plugin for people who save a lot of great pages but rarely revisit them.
+EffecCol is a Chrome extension plus an Obsidian plugin. It turns a good web page into something you can still remember, find, and use later.
 
-## Status
+## Why EffecCol exists
 
-EffecCol is currently an **open-source v1 prototype**. The core flow works, installation is still manual, and GitHub release packages are now available, but browser store and Obsidian community distribution are not finished yet.
+Most bookmarking tools solve storage, not retrieval.
 
-## Why This Project Exists
+You save a page because it feels useful, but a few days later you may no longer remember why it mattered, what it said, or where it belongs in your thinking. The result is a growing archive that feels heavy, underused, and slightly stressful.
 
-Most one-click bookmarking flows solve storage, but not retrieval.
+EffecCol was built for a different outcome:
 
-Most saved links end up in a browser bookmark folder, a read-later app, or a clipping library, and then slowly disappear into backlog. The problem is not that we did not save them. The problem is that our future selves cannot quickly remember what was saved, why it mattered, or where to use it.
+1. save the full source into your knowledge base
+2. keep a lighter summary card for your own index or workflow
+3. make saved material easier to resurface and reuse
 
-The note-taking method behind EffecCol is simple:
+That is why the project is called **EffecCol**: short for **Effective Collection**.
 
-1. Save the full source into your knowledge base.
-2. Put the title or summary into your own index, map, board, or outline.
-3. Make retrieval easier for your brain, not just for search.
+## Who it is for
 
-That is why this project is called **EffecCol**: short for **Effective Collection**.
+EffecCol is for people who:
 
-## The Core Idea
+- already use Obsidian as a long-term archive
+- save many articles, posts, and references but rarely revisit them on their own
+- feel anxious about a growing knowledge archive that they are not actively reviewing
+- keep their own index, MOC, board, outline, or dashboard
+- want one-click capture without filling in forms every time
 
-EffecCol intentionally produces **two different outputs**:
+If you only want a simple bookmark manager, EffecCol is probably more structured than you need.
 
-- A structured Obsidian note for archival and long-term reference.
-- A lighter clipboard card for manual placement into your own system.
+## What problem it solves
 
-This is important. The archive and the index should not be the same thing.
+EffecCol solves the gap between "I saved it" and "I can use it later."
 
-## What EffecCol Does
+One click produces two outputs with different jobs:
+
+- a structured Obsidian note for archive and full reference
+- a lighter clipboard card for manual placement in your own system
+
+This separation is intentional. The archive and the index should not be the same thing.
+
+## How it works
 
 When you click the extension icon on a page, EffecCol will:
 
-1. Extract the page title, URL, site name, selected text, and article content.
-2. Generate an AI summary.
-3. Save a structured note into your current Obsidian vault under `EffecCol/`.
-4. Copy a lighter summary card to your clipboard.
+1. extract the title, URL, site, selection, and main article body
+2. generate an AI summary
+3. save a structured note into the current Obsidian vault under `EffecCol/`
+4. copy a lighter knowledge card to the clipboard
 
-The main flow stays quiet:
+The capture flow stays quiet:
 
 - no popup form
 - no jump to Obsidian
-- no extra confirmation on each capture
+- no extra confirmation on each save
 
-## Two Outputs, Two Jobs
+## What you get
 
-### 1. Obsidian Note
+### Obsidian note
 
-The saved note is for knowledge-base storage. It includes:
+The saved note is for long-term storage. It includes:
 
-- frontmatter / Properties
-- title
+- frontmatter / properties
+- page title
 - AI summary
 - cleaned article body
 - source link
 - downloaded article images when available
 
-### 2. Clipboard Card
+### Clipboard card
 
 The clipboard card is for manual placement into your own working context. Depending on settings, it can include:
 
-- title
+- bold title
 - AI summary
 - Obsidian note path
 - Obsidian deep link
 - source URL
 
-This makes it easy to paste into your own notes, dashboard, whiteboard, outline, or planning doc.
+You can paste this card into any place you use as an index, not only Obsidian.
 
-## Current Features
+## Current status
 
-- One-click capture with page-level toast feedback
-- Silent local save into the currently opened Obsidian vault
-- AI summary generation with fallback when the model call fails
-- Clipboard card presets and field-level customization
-- Support for DeepSeek, OpenAI, Anthropic, and OpenAI-compatible endpoints
-- Article images saved under `EffecCol/_assets/` when possible
-- Better handling for WeChat articles, including title and image extraction improvements
-- Warning flow for low-value pages such as forum threads or index-like pages
-- Local pairing token between the browser extension and the Obsidian plugin
+EffecCol is an open-source **v1 prototype**.
 
-## How It Works
+What that means today:
 
-```mermaid
-flowchart LR
-  A["Web Page"] --> B["EffecCol Chrome Extension"]
-  B --> C["AI Provider"]
-  B --> D["Clipboard Card"]
-  B --> E["Local Obsidian Plugin"]
-  E --> F["Obsidian Vault"]
-```
+- the core flow works
+- installation is still manual
+- Obsidian desktop must stay open during capture
+- article extraction and image handling are still being improved
+- GitHub release packages are available for manual installation
+- browser store and Obsidian community distribution are not finished yet
 
 ## Installation
 
-### Requirements
+Follow this order for a clean first-time setup.
 
-- A Chromium-based browser
+### Before you start
+
+- a Chromium-based browser
 - Obsidian desktop
+- one Obsidian vault you want EffecCol to save into
 - Community plugins enabled in Obsidian
-- An API key for your chosen AI provider
+- an API key for your chosen AI provider
 
-### 1. Load the browser extension
+### 1. Open the target vault in Obsidian
 
-1. Open `chrome://extensions`
-2. Turn on Developer Mode
-3. Click `Load unpacked`
-4. Select this project folder: `obsidian-post-capture-extension/`
+Open Obsidian desktop first and make sure the vault you want to use is already open.
+
+EffecCol saves into the currently opened vault, so this step should happen before you test the extension.
 
 ### 2. Install the Obsidian plugin
 
-Copy `effecol-obsidian-plugin/` into your vault at:
+Copy `obsidian-plugin/effecol/` into your vault here:
 
 ```text
 .obsidian/plugins/effecol/
 ```
 
-Then enable `EffecCol` inside:
+If `.obsidian/plugins/` does not exist yet, create it first.
 
-1. `Settings`
-2. `Community plugins`
-3. Find `EffecCol`
-4. Turn it on
+Then enable `EffecCol` in Obsidian:
 
-### 3. Keep Obsidian open
+1. Open `Settings`
+2. Go to `Community plugins`
+3. If Restricted mode is on, turn it off
+4. Find `EffecCol`
+5. Turn it on
 
-The current v1 uses a local plugin running inside Obsidian, so Obsidian desktop needs to stay open while capturing.
+After that, keep Obsidian open.
 
-### 4. Configure AI
+### 3. Load the Chrome extension
 
-Open the extension options page and fill in:
+1. Open `chrome://extensions`
+2. Turn on Developer Mode
+3. Click `Load unpacked`
+4. Select the `extension/` folder in this repository
+
+Do not select the repository root. Chrome should load the folder that directly contains `manifest.json`.
+
+### 4. Configure AI in the extension
+
+Open the extension settings page and fill in:
 
 - AI provider
 - API key
@@ -146,85 +158,64 @@ Optional settings include:
 - summary preference
 - clipboard card preset
 
-## Quick Start
+### 5. Run the first capture test
 
-If you want to try the project with the least amount of setup:
+1. Keep Obsidian open
+2. Open a normal `http` or `https` article page in Chrome
+3. Click the EffecCol extension icon
 
-1. Load the Chrome extension from this folder.
-2. Copy `effecol-obsidian-plugin/` into your Obsidian vault plugin directory.
-3. Enable the `EffecCol` plugin in Obsidian.
-4. Open the extension settings and add your AI API key.
-5. Open any article page and click the extension icon.
+If everything is set up correctly:
 
-## Typical Workflow
+- a note will be saved into `EffecCol/` inside your current vault
+- a clipboard card will be copied for manual paste
 
-1. Open a content page.
-2. Optionally select a key paragraph.
-3. Click the `EffecCol` extension icon.
-4. Wait for the toast saying it is saving.
-5. The full note lands in Obsidian.
-6. Paste the clipboard card into your own index or workflow.
+If the first capture fails, the most common causes are:
 
-## Privacy and Data Flow
+- Obsidian is not open
+- the `EffecCol` Obsidian plugin is not enabled
+- the wrong folder was loaded in Chrome
+- the AI provider or API key is not configured yet
 
-- Your Obsidian note is written locally through the Obsidian plugin.
-- Your API keys are stored in the browser locally.
-- The extracted page content is sent to the AI provider you configured, only for summary generation.
-- Clipboard writing happens locally through the browser.
+## Privacy and data flow
 
-## Repository Structure
+- Obsidian notes are written locally through the Obsidian plugin.
+- API keys are stored locally in the browser.
+- Extracted page content is sent only to the AI provider you configure, and only for summary generation.
+- Clipboard writing happens locally in the browser.
 
-- `manifest.json`  
-  Chrome extension manifest
-- `background.js`  
-  main capture flow
-- `shared.js`  
-  shared templates and pure helpers
-- `options.html` / `options.js`  
-  settings page
-- `popup.html` / `popup.js`  
-  status and recovery page
-- `offscreen.html` / `offscreen.js`  
-  clipboard writing
-- `effecol-obsidian-plugin/`  
+## Repository structure
+
+- `extension/`
+  Chrome extension source, including `manifest.json`, background flow, settings page, status page, offscreen clipboard document, and icons
+- `obsidian-plugin/effecol/`
   Obsidian plugin for local save
-- `TEST_REPORT.md`  
-  local manual testing notes during development
-
-## Project Status
-
-EffecCol is currently a working v1 prototype.
-
-What that means:
-
-- core flow works
-- manual installation is still required
-- Obsidian must stay open
-- article extraction and image handling are still being improved
-- GitHub release packages are available for manual installation
-- the browser extension is not yet published to a store
-- the Obsidian plugin is not yet packaged for official community distribution
+- `docs/TEST_REPORT.md`
+  local manual testing notes
+- `scripts/bridge-server.js`
+  earlier bridge prototype kept for reference
+- `release-assets/`
+  local zip packages used for manual release testing
 
 ## Roadmap
 
-- Better article extraction across more sites
-- Better low-value page detection
-- Smoother first-run onboarding
-- Browser store and community distribution packaging
-- More reliable image downloading and rendering
+- better article extraction across more sites
+- better low-value page detection
+- smoother first-run onboarding
+- browser store and community distribution packaging
+- more reliable image downloading and rendering
 
 ## Contributing
 
 Issues and pull requests are welcome.
 
-If you want to help, the most useful contributions right now are:
+Helpful contribution areas right now:
 
 - article extraction edge cases
 - image handling across different sites
 - onboarding and setup clarity
 - release engineering
 
-For contribution and project policies, see:
+Project docs:
 
 - [CONTRIBUTING.md](./CONTRIBUTING.md)
 - [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md)
@@ -232,6 +223,6 @@ For contribution and project policies, see:
 - [CHANGELOG.md](./CHANGELOG.md)
 - [LICENSE](./LICENSE)
 
-## Philosophy in One Sentence
+## In one sentence
 
 EffecCol is not about collecting more. It is about collecting in a way that stays usable.

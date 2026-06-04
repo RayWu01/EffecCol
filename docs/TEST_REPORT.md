@@ -1,6 +1,6 @@
 # EffecCol 测试报告
 
-更新时间：2026-06-03
+更新时间：2026-06-04
 
 ## 测试目标
 
@@ -14,6 +14,8 @@
 ## 测试环境
 
 - 项目目录：本地开发工作区中的 `obsidian-post-capture-extension`
+- Chrome 扩展源码目录：`extension/`
+- Obsidian 插件源码目录：`obsidian-plugin/effecol/`
 - 浏览器：Google Chrome，开发者模式加载本地扩展
 - Obsidian：桌面端已安装并运行
 - 当前 Vault：本地测试用 Obsidian vault
@@ -35,12 +37,12 @@
 
 ## 用例与结果
 
-> 注：这份文档主要是开发过程中的本地测试记录，因此仍然保留了少量本地文件引用，便于回顾当时的验证上下文。
+> 注：这份文档主要是开发过程中的本地测试记录。仓库结构已整理为 `extension/` 与 `obsidian-plugin/effecol/`，因此下面的本地文件引用也已同步到新路径。
 
 ### TC-01 设置页品牌 icon 接入
 
 - 目标：设置页左上角使用正式 icon，而不是占位字母
-- 方法：检查 [options.html](/Users/wurui/Documents/有效收藏/obsidian-post-capture-extension/options.html) 与 [styles.css](/Users/wurui/Documents/有效收藏/obsidian-post-capture-extension/styles.css)
+- 方法：检查 [options.html](/Users/wurui/Documents/有效收藏/obsidian-post-capture-extension/extension/options.html) 与 [styles.css](/Users/wurui/Documents/有效收藏/obsidian-post-capture-extension/extension/styles.css)
 - 结果：通过
 - 证据：
   - `options.html` 已改为 `<img src="icons/effective-collection-48.png" ...>`
@@ -50,14 +52,14 @@
 ### TC-02 状态页品牌 icon 接入
 
 - 目标：失败补救页也使用正式 icon
-- 方法：检查 [popup.html](/Users/wurui/Documents/有效收藏/obsidian-post-capture-extension/popup.html)
+- 方法：检查 [popup.html](/Users/wurui/Documents/有效收藏/obsidian-post-capture-extension/extension/popup.html)
 - 结果：通过
 - 备注：与 TC-01 一样，浏览器运行态需要重载扩展
 
 ### TC-03 设置页大屏可读性
 
 - 目标：设置页在大屏下不要拉得过宽
-- 方法：检查 [styles.css](/Users/wurui/Documents/有效收藏/obsidian-post-capture-extension/styles.css)
+- 方法：检查 [styles.css](/Users/wurui/Documents/有效收藏/obsidian-post-capture-extension/extension/styles.css)
 - 结果：通过
 - 证据：`.shell { max-width: 1120px; margin: 0 auto; }`
 
@@ -95,7 +97,7 @@
 ### TC-07 未装 Obsidian / 未启用插件提醒
 
 - 目标：用户未完成 Obsidian 环境准备时，扩展是否会给提醒
-- 方法：检查 [background.js](/Users/wurui/Documents/有效收藏/obsidian-post-capture-extension/background.js) 与 [options.js](/Users/wurui/Documents/有效收藏/obsidian-post-capture-extension/options.js)
+- 方法：检查 [background.js](/Users/wurui/Documents/有效收藏/obsidian-post-capture-extension/extension/background.js) 与 [options.js](/Users/wurui/Documents/有效收藏/obsidian-post-capture-extension/extension/options.js)
 - 结果：部分通过
 - 当前行为：
   - 当本地接口不可达时，扩展会阻止静默保存
@@ -108,7 +110,7 @@
 ### TC-07A 统一环境诊断链路
 
 - 目标：设置页检查和主流程保存前检查是否使用同一套诊断逻辑
-- 方法：检查 [background.js](/Users/wurui/Documents/有效收藏/obsidian-post-capture-extension/background.js) 与 [options.js](/Users/wurui/Documents/有效收藏/obsidian-post-capture-extension/options.js)
+- 方法：检查 [background.js](/Users/wurui/Documents/有效收藏/obsidian-post-capture-extension/extension/background.js) 与 [options.js](/Users/wurui/Documents/有效收藏/obsidian-post-capture-extension/extension/options.js)
 - 结果：通过
 - 证据：
   - 设置页改为调用 `effecol:diagnose-environment`
@@ -118,7 +120,7 @@
 ### TC-08 特殊网页失败提醒
 
 - 目标：在 `chrome://`、扩展页、新标签页等特殊页面点击扩展时，是否明确提示不支持
-- 方法：检查 [background.js](/Users/wurui/Documents/有效收藏/obsidian-post-capture-extension/background.js)
+- 方法：检查 [background.js](/Users/wurui/Documents/有效收藏/obsidian-post-capture-extension/extension/background.js)
 - 结果：代码通过，运行态待重载复测
 - 当前实现：
   - 新增 `isCapturableUrl()` 判断
@@ -129,7 +131,7 @@
 ### TC-09 剪贴板通道实现稳定性
 
 - 目标：收藏成功后，卡片能走 offscreen 通道写入剪贴板
-- 方法：检查 [offscreen.js](/Users/wurui/Documents/有效收藏/obsidian-post-capture-extension/offscreen.js) 与 [background.js](/Users/wurui/Documents/有效收藏/obsidian-post-capture-extension/background.js)
+- 方法：检查 [offscreen.js](/Users/wurui/Documents/有效收藏/obsidian-post-capture-extension/extension/offscreen.js) 与 [background.js](/Users/wurui/Documents/有效收藏/obsidian-post-capture-extension/extension/background.js)
 - 结果：通过代码检查
 - 说明：
   - 当前使用 offscreen document + `document.execCommand("copy")`
@@ -147,12 +149,12 @@
   - `options.js`
   - `popup.js`
   - `offscreen.js`
-  - `effecol-obsidian-plugin/main.js`
+  - `obsidian-plugin/effecol/main.js`
 
 ### TC-11 本地接口鉴权
 
 - 目标：确认 Obsidian 本地保存接口不再接受未授权写入
-- 方法：代码检查 [effecol-obsidian-plugin/main.js](/Users/wurui/Documents/有效收藏/obsidian-post-capture-extension/effecol-obsidian-plugin/main.js) 与 [background.js](/Users/wurui/Documents/有效收藏/obsidian-post-capture-extension/background.js)
+- 方法：代码检查 [main.js](/Users/wurui/Documents/有效收藏/obsidian-post-capture-extension/obsidian-plugin/effecol/main.js) 与 [background.js](/Users/wurui/Documents/有效收藏/obsidian-post-capture-extension/extension/background.js)
 - 结果：通过代码检查，运行态待用户重启插件后复测
 - 当前实现：
   - 新增 `POST /pair`，浏览器扩展会自动获取配对 token
@@ -177,7 +179,7 @@
 ### TC-13 低价值页面拦截
 
 - 目标：论坛串、目录页、索引页是否会先提示，而不是直接静默写入
-- 方法：检查 [background.js](/Users/wurui/Documents/有效收藏/obsidian-post-capture-extension/background.js)
+- 方法：检查 [background.js](/Users/wurui/Documents/有效收藏/obsidian-post-capture-extension/extension/background.js)
 - 结果：通过代码检查，运行态待用户复测
 - 当前实现：
   - 新增 `assessCaptureQuality(...)`

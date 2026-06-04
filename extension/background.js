@@ -393,7 +393,7 @@ async function diagnoseEnvironment(inputSettings = null, options = {}) {
       details: [
         "如果你还没安装 Obsidian，请先安装 Obsidian 桌面端。",
         "如果已经安装 Obsidian，请打开它，并在当前 Vault 启用 EffecCol 插件。",
-        "如果还没安装 EffecCol 插件，请把仓库里的 effecol-obsidian-plugin 放进当前 Vault 的 .obsidian/plugins/effecol/ 后启用。"
+        "如果还没安装 EffecCol 插件，请把仓库里的 obsidian-plugin/effecol/ 放进当前 Vault 的 .obsidian/plugins/effecol/ 后启用。"
       ],
       needsSetup: true,
       shouldOpenOptions: true,

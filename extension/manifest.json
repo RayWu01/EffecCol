@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "EffecCol",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "一键把当前网页沉淀到 Obsidian 的 EffecCol，并复制可继续整理的剪贴板卡片。",
   "icons": {
     "16": "icons/effective-collection-16.png",
